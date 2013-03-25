@@ -15,7 +15,8 @@
 #undef FALSE
 #define FALSE 0
 
-// This is a binding to http_parser (https://github.com/joyent/http-parser)
+
+// okThis is a binding to http_parser (https://github.com/joyent/http-parser)
 // The goal is to decouple sockets from parsing for more javascript-level
 // agility. A Buffer is read from a socket and passed to parser.execute().
 // The parser then issues callbacks with slices of the data
