@@ -29,13 +29,13 @@
 #include <vector>
 
 #define MAX_HEADERS 13
-#define MAX_ELEMENT_SIZE 500
+#define MAX_ELEMENT_SIZE 2048
 
 //#define MIN(a,b) ((a) < (b) ? (a) : (b))
 
 
 struct HttpParserMessage {
-  const char *name; // for debugging purposes
+  std::string name; // for debugging purposes
   const char *raw;
   enum http_parser_type type;
   enum http_method method;
@@ -44,17 +44,18 @@ struct HttpParserMessage {
   char request_url[MAX_ELEMENT_SIZE];
   char fragment[MAX_ELEMENT_SIZE];
   char query_string[MAX_ELEMENT_SIZE];
-  char body[MAX_ELEMENT_SIZE];
+  std::string body;
   size_t body_size;
-  const char *host;
-  const char *userinfo;
+  
+  std::string host;
+  std::string userinfo;
   uint16_t port;
   int num_headers;
   enum { NONE=0, FIELD, VALUE } last_header_element;
   char headers [MAX_HEADERS][2][MAX_ELEMENT_SIZE];
   int should_keep_alive;
 
-  const char *upgrade; // upgraded body
+  std::string upgrade; // upgraded body
 
   unsigned short http_major;
   unsigned short http_minor;

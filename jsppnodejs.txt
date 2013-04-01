@@ -1,0 +1,1 @@
+./Debug/libjspp_http_parser.o ./Debug/server3_server.o ./Debug/server3_request_parser.o ./Debug/server3_request_handler.o ./Debug/server3_reply.o ./Debug/server3_mime_types.o ./Debug/server3_main.o ./Debug/server3_connection.o ./Debug/http_parser_http_parser.o

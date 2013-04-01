@@ -8,15 +8,24 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
-    <File Name="../node-v0.10.0/src/tcp_wrap.cc"/>
-    <File Name="../node-v0.10.0/deps/http_parser/test.c"/>
-    <File Name="../node-v0.10.0/src/stream_wrap.cc"/>
     <File Name="libjspp_http_parser.cpp"/>
+    <File Name="server3/main.cpp"/>
+    <File Name="../node-v0.10.0/deps/http_parser/http_parser.c"/>
+    <File Name="mongoose.c"/>
+    <File Name="event_loop.cpp"/>
+    <File Name="worker.cpp"/>
+    <File Name="client_connection.cpp"/>
+    <File Name="SynchronisedQueue.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
-    <File Name="../node-v0.10.0/src/node.h"/>
-    <File Name="../node-v0.10.0/src/node_buffer.h"/>
     <File Name="libjspp_http_parser.h"/>
+    <File Name="mongoose.h"/>
+    <File Name="event_loop.h"/>
+    <File Name="worker.h"/>
+    <File Name="client_connection.h"/>
+    <File Name="Buffer.h"/>
+    <File Name="SynchronisedQueue.h"/>
+    <File Name="ClientConnCache.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -33,12 +42,18 @@
         <IncludePath Value="."/>
         <IncludePath Value="/home/anandrathi/sre/node-v0.10.0/deps/http_parser"/>
         <IncludePath Value="/home/anandrathi/sre/node-v0.10.0/deps/uv/include"/>
+        <IncludePath Value="/home/anandrathi/sre/boost_1_53_0/"/>
       </Compiler>
-      <Linker Options="" Required="yes"/>
+      <Linker Options="" Required="yes">
+        <LibraryPath Value="/home/anandrathi/sre/boost_1_53_0/stage/lib"/>
+        <Library Value="boost_thread.so"/>
+        <Library Value="pthread"/>
+        <Library Value="boost_system"/>
+      </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="0.0.0.0 8000 1 ." UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[]]>
+        <![CDATA[LD_LIBRARY_PATH=/home/anandrathi/sre/boost_1_53_0/stage/lib]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
@@ -71,16 +86,24 @@
       <Compiler Options="-O2;-Wall" C_Options="-O2;-Wall" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="."/>
         <IncludePath Value="/home/anandrathi/sre/node-v0.10.0/deps/http_parser"/>
+        <IncludePath Value="/home/anandrathi/sre/boost_1_53_0"/>
+        <IncludePath Value="/home/anandrathi/sre/node-v0.10.0/deps"/>
       </Compiler>
-      <Linker Options="" Required="yes"/>
+      <Linker Options="" Required="yes">
+        <LibraryPath Value="/home/anandrathi/sre/boost_1_53_0/stage/lib"/>
+        <Library Value="boost_thread.so"/>
+        <Library Value="pthread"/>
+        <Library Value="boost_system"/>
+        <Library Value="uv.a"/>
+      </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[]]>
+        <![CDATA[LD_LIBRARY_PATH=/home/anandrathi/sre/boost_1_53_0/stage/lib]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
-        <PostConnectCommands/>
-        <StartupCommands/>
+        <PostConnectCommands>0.0.0.0 80 .</PostConnectCommands>
+        <StartupCommands>0.0.0.0 80 .</StartupCommands>
       </Debugger>
       <PreBuild/>
       <PostBuild/>
@@ -102,7 +125,8 @@
         <ClangCmpFlagsC/>
         <ClangCmpFlags/>
         <ClangPP/>
-        <SearchPaths/>
+        <SearchPaths>/home/anandrathi/sre/boost_1_53_0
+/home/anandrathi/sre/boost_1_53_0/libs/asio/example/http/server3</SearchPaths>
       </Completion>
     </Configuration>
   </Settings>

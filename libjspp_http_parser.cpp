@@ -157,7 +157,8 @@ int HttpParser::header_value_cb (http_parser *p, const char *buf, size_t len)
 }
 int HttpParser::body_cb(http_parser *p, const char *buf, size_t len)
 {
-  strncat(m_messages[m_num_messages].body, buf, len);
+  m_messages[m_num_messages].body.append(buf,len);  
+  //strncat(m_messages[m_num_messages].body, buf, len);
   m_messages[m_num_messages].body_size += len;
  // printf("body_cb: '%s'\n", requests[num_messages].body);
   return 0;

@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=03/24/2013
+Date                   :=04/01/2013
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -36,12 +36,12 @@ ObjectsFileList        :="jsppnodejs.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
 LinkOptions            :=  
-IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)/home/anandrathi/sre/node-v0.10.0/deps/http_parser 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)/home/anandrathi/sre/node-v0.10.0/deps/http_parser $(IncludeSwitch)/home/anandrathi/sre/boost_1_53_0 $(IncludeSwitch)/home/anandrathi/sre/node-v0.10.0/deps 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := 
-ArLibs                 :=  
-LibPath                := $(LibraryPathSwitch). 
+Libs                   := $(LibrarySwitch)boost_thread $(LibrarySwitch)pthread $(LibrarySwitch)boost_system $(LibrarySwitch)uv 
+ArLibs                 :=  "boost_thread.so" "pthread" "boost_system" "uv.a" 
+LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)/home/anandrathi/sre/boost_1_53_0/stage/lib 
 
 ##
 ## Common variables
@@ -58,7 +58,8 @@ CFLAGS   :=  -O2 -Wall $(Preprocessors)
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/src_tcp_wrap$(ObjectSuffix) $(IntermediateDirectory)/http_parser_test$(ObjectSuffix) $(IntermediateDirectory)/src_stream_wrap$(ObjectSuffix) $(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix) 
+LD_LIBRARY_PATH:=/home/anandrathi/sre/boost_1_53_0/stage/lib
+Objects0=$(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix) $(IntermediateDirectory)/server3_main$(ObjectSuffix) $(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix) $(IntermediateDirectory)/mongoose$(ObjectSuffix) $(IntermediateDirectory)/event_loop$(ObjectSuffix) $(IntermediateDirectory)/worker$(ObjectSuffix) $(IntermediateDirectory)/client_connection$(ObjectSuffix) $(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix) 
 
 Objects=$(Objects0) 
 
@@ -83,30 +84,6 @@ PreBuild:
 ##
 ## Objects
 ##
-$(IntermediateDirectory)/src_tcp_wrap$(ObjectSuffix): ../node-v0.10.0/src/tcp_wrap.cc $(IntermediateDirectory)/src_tcp_wrap$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/node-v0.10.0/src/tcp_wrap.cc" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_tcp_wrap$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/src_tcp_wrap$(DependSuffix): ../node-v0.10.0/src/tcp_wrap.cc
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_tcp_wrap$(ObjectSuffix) -MF$(IntermediateDirectory)/src_tcp_wrap$(DependSuffix) -MM "../node-v0.10.0/src/tcp_wrap.cc"
-
-$(IntermediateDirectory)/src_tcp_wrap$(PreprocessSuffix): ../node-v0.10.0/src/tcp_wrap.cc
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_tcp_wrap$(PreprocessSuffix) "../node-v0.10.0/src/tcp_wrap.cc"
-
-$(IntermediateDirectory)/http_parser_test$(ObjectSuffix): ../node-v0.10.0/deps/http_parser/test.c $(IntermediateDirectory)/http_parser_test$(DependSuffix)
-	$(CXX) $(SourceSwitch) "/home/anandrathi/sre/node-v0.10.0/deps/http_parser/test.c" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/http_parser_test$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/http_parser_test$(DependSuffix): ../node-v0.10.0/deps/http_parser/test.c
-	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/http_parser_test$(ObjectSuffix) -MF$(IntermediateDirectory)/http_parser_test$(DependSuffix) -MM "../node-v0.10.0/deps/http_parser/test.c"
-
-$(IntermediateDirectory)/http_parser_test$(PreprocessSuffix): ../node-v0.10.0/deps/http_parser/test.c
-	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/http_parser_test$(PreprocessSuffix) "../node-v0.10.0/deps/http_parser/test.c"
-
-$(IntermediateDirectory)/src_stream_wrap$(ObjectSuffix): ../node-v0.10.0/src/stream_wrap.cc $(IntermediateDirectory)/src_stream_wrap$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/node-v0.10.0/src/stream_wrap.cc" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_stream_wrap$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/src_stream_wrap$(DependSuffix): ../node-v0.10.0/src/stream_wrap.cc
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_stream_wrap$(ObjectSuffix) -MF$(IntermediateDirectory)/src_stream_wrap$(DependSuffix) -MM "../node-v0.10.0/src/stream_wrap.cc"
-
-$(IntermediateDirectory)/src_stream_wrap$(PreprocessSuffix): ../node-v0.10.0/src/stream_wrap.cc
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_stream_wrap$(PreprocessSuffix) "../node-v0.10.0/src/stream_wrap.cc"
-
 $(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix): libjspp_http_parser.cpp $(IntermediateDirectory)/libjspp_http_parser$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/libjspp_http_parser.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/libjspp_http_parser$(DependSuffix): libjspp_http_parser.cpp
@@ -115,24 +92,92 @@ $(IntermediateDirectory)/libjspp_http_parser$(DependSuffix): libjspp_http_parser
 $(IntermediateDirectory)/libjspp_http_parser$(PreprocessSuffix): libjspp_http_parser.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/libjspp_http_parser$(PreprocessSuffix) "libjspp_http_parser.cpp"
 
+$(IntermediateDirectory)/server3_main$(ObjectSuffix): server3/main.cpp $(IntermediateDirectory)/server3_main$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/server3/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/server3_main$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/server3_main$(DependSuffix): server3/main.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/server3_main$(ObjectSuffix) -MF$(IntermediateDirectory)/server3_main$(DependSuffix) -MM "server3/main.cpp"
+
+$(IntermediateDirectory)/server3_main$(PreprocessSuffix): server3/main.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/server3_main$(PreprocessSuffix) "server3/main.cpp"
+
+$(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix): ../node-v0.10.0/deps/http_parser/http_parser.c $(IntermediateDirectory)/http_parser_http_parser$(DependSuffix)
+	$(CXX) $(SourceSwitch) "/home/anandrathi/sre/node-v0.10.0/deps/http_parser/http_parser.c" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/http_parser_http_parser$(DependSuffix): ../node-v0.10.0/deps/http_parser/http_parser.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix) -MF$(IntermediateDirectory)/http_parser_http_parser$(DependSuffix) -MM "../node-v0.10.0/deps/http_parser/http_parser.c"
+
+$(IntermediateDirectory)/http_parser_http_parser$(PreprocessSuffix): ../node-v0.10.0/deps/http_parser/http_parser.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/http_parser_http_parser$(PreprocessSuffix) "../node-v0.10.0/deps/http_parser/http_parser.c"
+
+$(IntermediateDirectory)/mongoose$(ObjectSuffix): mongoose.c $(IntermediateDirectory)/mongoose$(DependSuffix)
+	$(CXX) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/mongoose.c" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose$(DependSuffix): mongoose.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose$(DependSuffix) -MM "mongoose.c"
+
+$(IntermediateDirectory)/mongoose$(PreprocessSuffix): mongoose.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose$(PreprocessSuffix) "mongoose.c"
+
+$(IntermediateDirectory)/event_loop$(ObjectSuffix): event_loop.cpp $(IntermediateDirectory)/event_loop$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/event_loop.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/event_loop$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/event_loop$(DependSuffix): event_loop.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/event_loop$(ObjectSuffix) -MF$(IntermediateDirectory)/event_loop$(DependSuffix) -MM "event_loop.cpp"
+
+$(IntermediateDirectory)/event_loop$(PreprocessSuffix): event_loop.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/event_loop$(PreprocessSuffix) "event_loop.cpp"
+
+$(IntermediateDirectory)/worker$(ObjectSuffix): worker.cpp $(IntermediateDirectory)/worker$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/worker.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/worker$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/worker$(DependSuffix): worker.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/worker$(ObjectSuffix) -MF$(IntermediateDirectory)/worker$(DependSuffix) -MM "worker.cpp"
+
+$(IntermediateDirectory)/worker$(PreprocessSuffix): worker.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/worker$(PreprocessSuffix) "worker.cpp"
+
+$(IntermediateDirectory)/client_connection$(ObjectSuffix): client_connection.cpp $(IntermediateDirectory)/client_connection$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/client_connection.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/client_connection$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/client_connection$(DependSuffix): client_connection.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/client_connection$(ObjectSuffix) -MF$(IntermediateDirectory)/client_connection$(DependSuffix) -MM "client_connection.cpp"
+
+$(IntermediateDirectory)/client_connection$(PreprocessSuffix): client_connection.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/client_connection$(PreprocessSuffix) "client_connection.cpp"
+
+$(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix): SynchronisedQueue.cpp $(IntermediateDirectory)/SynchronisedQueue$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/SynchronisedQueue.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SynchronisedQueue$(DependSuffix): SynchronisedQueue.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix) -MF$(IntermediateDirectory)/SynchronisedQueue$(DependSuffix) -MM "SynchronisedQueue.cpp"
+
+$(IntermediateDirectory)/SynchronisedQueue$(PreprocessSuffix): SynchronisedQueue.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SynchronisedQueue$(PreprocessSuffix) "SynchronisedQueue.cpp"
+
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
 ##
 ## Clean
 ##
 clean:
-	$(RM) $(IntermediateDirectory)/src_tcp_wrap$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/src_tcp_wrap$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/src_tcp_wrap$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/http_parser_test$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/http_parser_test$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/http_parser_test$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/src_stream_wrap$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/src_stream_wrap$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/src_stream_wrap$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/libjspp_http_parser$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/libjspp_http_parser$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/server3_main$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/server3_main$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/server3_main$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/http_parser_http_parser$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/http_parser_http_parser$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/mongoose$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/mongoose$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/mongoose$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/event_loop$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/event_loop$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/event_loop$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/worker$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/worker$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/worker$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/client_connection$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/client_connection$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/client_connection$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/SynchronisedQueue$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/SynchronisedQueue$(PreprocessSuffix)
 	$(RM) $(OutputFile)
 	$(RM) ".build-release/jsppnodejs"
 
