@@ -15,23 +15,27 @@
 class EventLoop
 {
     CLIENTCONNECTIONLIST freeClientConn; 
-
 public:
     EventLoop();
     ~EventLoop();
     void Run();
     int CreateAndBind (char *port);
-    static void on_close(uv_handle_t* handle) ;
-    static uv_buf_t on_alloc(uv_handle_t* handle, size_t suggested_size);
-    static void on_read(uv_stream_t* tcp, ssize_t nread, uv_buf_t buf);
-    static void on_connect(uv_stream_t* server_handle, int status) ;
+    static void on_close_s(uv_handle_t* handle) ;
+    static uv_buf_t on_alloc_s(uv_handle_t* handle, size_t suggested_size);
+    static void on_read_s(uv_stream_t* tcp, ssize_t nread, uv_buf_t buf);
+    static void on_connect_s(uv_stream_t* server_handle, int status) ;
+    void on_connect(uv_stream_t* server_handle, int status) ;
+    void after_write(uv_write_t* req, int status);
+    int Loop();
     
     private://  Temprory 
-        int t_n, t_i;
+        int t_n;
+        int t_i;
+        int t_r ;
     private://  Members
         uv_loop_t* m_uv_loop;
         uv_tcp_t m_server;
-        
+        size_t m_request_num;
 };
 
 #endif // EVENTLOOP_H

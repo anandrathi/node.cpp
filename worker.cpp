@@ -26,9 +26,24 @@ void Worker::Start()
         m_thread_impl =  new boost::thread(boost::bind(&Worker::Run, this));
 }
 
+void Worker::Join() 
+{
+    if(m_thread_impl!=0)
+        m_thread_impl->join();
+}
+
+void Worker::Shutdown() 
+{
+    
+}
+
 void Worker::Run()
 {   m_ClientConnection=0;
+    if(m_stop)
+        return; 
     m_ClientConnection=m_ClientSynchronisedQueue.Dequeue();
+    if(m_stop)
+        return; 
     if(m_ClientConnection) {
         
     }

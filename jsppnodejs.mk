@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=04/01/2013
+Date                   :=04/03/2013
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -39,9 +39,9 @@ LinkOptions            :=
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)/home/anandrathi/sre/node-v0.10.0/deps/http_parser $(IncludeSwitch)/home/anandrathi/sre/boost_1_53_0 $(IncludeSwitch)/home/anandrathi/sre/node-v0.10.0/deps 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)boost_thread $(LibrarySwitch)pthread $(LibrarySwitch)boost_system $(LibrarySwitch)uv 
-ArLibs                 :=  "boost_thread.so" "pthread" "boost_system" "uv.a" 
-LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)/home/anandrathi/sre/boost_1_53_0/stage/lib 
+Libs                   := $(LibrarySwitch)boost_thread $(LibrarySwitch)pthread $(LibrarySwitch)boost_system $(LibrarySwitch)uv $(LibrarySwitch)rt 
+ArLibs                 :=  "boost_thread.so" "pthread" "boost_system" "uv.a" "rt" 
+LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)/home/anandrathi/sre/boost_1_53_0/stage/lib $(LibraryPathSwitch)//home/anandrathi/sre/node-v0.10.0/deps/uv 
 
 ##
 ## Common variables
@@ -59,7 +59,7 @@ CFLAGS   :=  -O2 -Wall $(Preprocessors)
 ##
 CodeLiteDir:=/usr/share/codelite
 LD_LIBRARY_PATH:=/home/anandrathi/sre/boost_1_53_0/stage/lib
-Objects0=$(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix) $(IntermediateDirectory)/server3_main$(ObjectSuffix) $(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix) $(IntermediateDirectory)/mongoose$(ObjectSuffix) $(IntermediateDirectory)/event_loop$(ObjectSuffix) $(IntermediateDirectory)/worker$(ObjectSuffix) $(IntermediateDirectory)/client_connection$(ObjectSuffix) $(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix) $(IntermediateDirectory)/server3_main$(ObjectSuffix) $(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix) $(IntermediateDirectory)/event_loop$(ObjectSuffix) $(IntermediateDirectory)/worker$(ObjectSuffix) $(IntermediateDirectory)/client_connection$(ObjectSuffix) $(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix) 
 
 Objects=$(Objects0) 
 
@@ -108,14 +108,6 @@ $(IntermediateDirectory)/http_parser_http_parser$(DependSuffix): ../node-v0.10.0
 $(IntermediateDirectory)/http_parser_http_parser$(PreprocessSuffix): ../node-v0.10.0/deps/http_parser/http_parser.c
 	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/http_parser_http_parser$(PreprocessSuffix) "../node-v0.10.0/deps/http_parser/http_parser.c"
 
-$(IntermediateDirectory)/mongoose$(ObjectSuffix): mongoose.c $(IntermediateDirectory)/mongoose$(DependSuffix)
-	$(CXX) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/mongoose.c" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/mongoose$(DependSuffix): mongoose.c
-	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose$(DependSuffix) -MM "mongoose.c"
-
-$(IntermediateDirectory)/mongoose$(PreprocessSuffix): mongoose.c
-	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose$(PreprocessSuffix) "mongoose.c"
-
 $(IntermediateDirectory)/event_loop$(ObjectSuffix): event_loop.cpp $(IntermediateDirectory)/event_loop$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/event_loop.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/event_loop$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/event_loop$(DependSuffix): event_loop.cpp
@@ -163,9 +155,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/http_parser_http_parser$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/http_parser_http_parser$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/mongoose$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/mongoose$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/mongoose$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/event_loop$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/event_loop$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/event_loop$(PreprocessSuffix)

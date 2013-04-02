@@ -11,21 +11,21 @@
     <File Name="libjspp_http_parser.cpp"/>
     <File Name="server3/main.cpp"/>
     <File Name="../node-v0.10.0/deps/http_parser/http_parser.c"/>
-    <File Name="mongoose.c"/>
     <File Name="event_loop.cpp"/>
     <File Name="worker.cpp"/>
     <File Name="client_connection.cpp"/>
     <File Name="SynchronisedQueue.cpp"/>
+    <File Name="workerPool.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
     <File Name="libjspp_http_parser.h"/>
-    <File Name="mongoose.h"/>
     <File Name="event_loop.h"/>
     <File Name="worker.h"/>
     <File Name="client_connection.h"/>
     <File Name="Buffer.h"/>
     <File Name="SynchronisedQueue.h"/>
     <File Name="ClientConnCache.h"/>
+    <File Name="workerPool.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -91,10 +91,12 @@
       </Compiler>
       <Linker Options="" Required="yes">
         <LibraryPath Value="/home/anandrathi/sre/boost_1_53_0/stage/lib"/>
+        <LibraryPath Value="//home/anandrathi/sre/node-v0.10.0/deps/uv"/>
         <Library Value="boost_thread.so"/>
         <Library Value="pthread"/>
         <Library Value="boost_system"/>
         <Library Value="uv.a"/>
+        <Library Value="rt"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
@@ -126,7 +128,8 @@
         <ClangCmpFlags/>
         <ClangPP/>
         <SearchPaths>/home/anandrathi/sre/boost_1_53_0
-/home/anandrathi/sre/boost_1_53_0/libs/asio/example/http/server3</SearchPaths>
+/home/anandrathi/sre/boost_1_53_0/libs/asio/example/http/server3
+/home/anandrathi/sre/node-v0.10.0/deps</SearchPaths>
       </Completion>
     </Configuration>
   </Settings>

@@ -23,34 +23,22 @@ class ClientConnection
     uv_write_t m_write_req;
     EventLoop * m_EventLoop;
 public:
-    ClientConnection(){};
+    ClientConnection(EventLoop* p_EventLoop);
     ~ClientConnection();
-    int getRequestNum(){return m_request_num;}
-    void setRequestNum(int num){m_request_num=num;}
-    uv_tcp_t* getHandle(){ return &m_handle;}
-    EventLoop*  getEventLoop(){return m_EventLoop;}
-    octetBuffer& getInDataBuffer(){return m_vecDataIn;}
-    octetBuffer& getOutDataBuffer(){return m_vecDataOut;}
+    inline int getRequestNum(){return m_request_num;}
+    inline void setRequestNum(int num){m_request_num=num;}
+    inline uv_tcp_t* getHandle(){ return &m_handle;}
+    inline EventLoop*  getEventLoop(){return m_EventLoop;}
+    inline octetBuffer& getInDataBuffer(){return m_vecDataIn;}
+    inline octetBuffer& getOutDataBuffer(){return m_vecDataOut;}
 
-    ParserPlusPlus& getParserPlusPlus(void) {return m_ParserPlusPlus;}
-    int& getFD(){return m_fd;}
-    void setFD(int p_fd){m_fd=p_fd;}
-    void setDataIN(char * p_data, size_t p_size)
-    { 
-        m_vecDataIn.setData(p_data, p_size);
-    }
-    void setDataOut(char * p_data, size_t p_size)
-    { 
-        m_vecDataOut.setData(p_data, p_size);
-    }
-    void PushDataIN(char * p_data, size_t p_size)
-    { 
-        m_vecDataIn.PushData(p_data, p_size);
-    }
-    void PushDataOut(char * p_data, size_t p_size)
-    { 
-        m_vecDataOut.PushData(p_data, p_size);
-    }
+    inline ParserPlusPlus& getParserPlusPlus(void) {return m_ParserPlusPlus;}
+    inline int& getFD(){return m_fd;}
+    inline void setFD(int p_fd){m_fd=p_fd;}
+    void setDataIN(char * p_data, size_t p_size) { m_vecDataIn.setData(p_data, p_size);  }
+    void setDataOut(char * p_data, size_t p_size) { m_vecDataOut.setData(p_data, p_size); }
+    void PushDataIN(char * p_data, size_t p_size) { m_vecDataIn.PushData(p_data, p_size); }
+    void PushDataOut(char * p_data, size_t p_size) { m_vecDataOut.PushData(p_data, p_size); }
 
 };
 
