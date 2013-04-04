@@ -18,15 +18,13 @@ class EventLoop
 public:
     EventLoop();
     ~EventLoop();
-    void Run();
-    int CreateAndBind (char *port);
     static void on_close_s(uv_handle_t* handle) ;
     static uv_buf_t on_alloc_s(uv_handle_t* handle, size_t suggested_size);
     static void on_read_s(uv_stream_t* tcp, ssize_t nread, uv_buf_t buf);
     static void on_connect_s(uv_stream_t* server_handle, int status) ;
     void on_connect(uv_stream_t* server_handle, int status) ;
     void after_write(uv_write_t* req, int status);
-    int Loop();
+    int Loop(const char* ip, int port);
     
     private://  Temprory 
         int t_n;

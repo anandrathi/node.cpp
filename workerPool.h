@@ -4,10 +4,9 @@
 #include "SynchronisedQueue.h"
 #include <vector>
 
-
 class WorkerPool
 {
-    std::vector<worker*> WorkersArray;
+    std::vector<WorkerPtr> m_WorkersArray;
     static WorkerPool *s_WorkerPool;
     int m_size;
     ClientSynchronisedQueue m_queue;
@@ -16,7 +15,7 @@ class WorkerPool
 
 public:
     static WorkerPool * GetInstance();
-    void CreatePool(int size);
+    void CreatePool(size_t size);
     void Start();
     void Shutdown();
     

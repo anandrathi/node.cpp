@@ -211,7 +211,7 @@ size_t HttpParser::parse (const char *buf, size_t len)
 {
   size_t nparsed;
   m_currently_parsing_eof = (len == 0);
-  nparsed = http_parser_execute(static_cast<http_parser*>(&m_parser), &m_settings, buf, len);
+  nparsed = http_parser_execute(static_cast<http_parser*>(&m_ParserPlusPlus), &m_settings, buf, len);
   return nparsed;
 }
 
@@ -246,8 +246,8 @@ void HttpParser::Init(enum http_parser_type type)
     memset(&tm,sizeof(HttpParserMessage), 0);
     //    assert(m_parser == NULL);
     //    m_parser = new ParserPlusPlus;
-    m_parser.m_Parser=this;
-    http_parser_init(static_cast<http_parser*>(&m_parser), type);
+    m_ParserPlusPlus.m_Parser=this;
+    http_parser_init(static_cast<http_parser*>(&m_ParserPlusPlus), type);
     m_settings.on_message_begin = HttpParser::smessage_begin_cb;
     m_settings.on_header_field = HttpParser::sheader_field_cb;
     m_settings.on_header_value = HttpParser::sheader_value_cb;
@@ -255,6 +255,10 @@ void HttpParser::Init(enum http_parser_type type)
     m_settings.on_body = HttpParser::sbody_cb;
     m_settings.on_headers_complete = HttpParser::sheaders_complete_cb;
     m_settings.on_message_complete = HttpParser::smessage_complete_cb;
+    
+    memset(&tm,sizeof(HttpParserMessage), 0);
+    m_messages.push_back(tm);
+    
 }
 
 

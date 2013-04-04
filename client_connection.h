@@ -17,7 +17,7 @@ class ClientConnection
     int m_fd;
     octetBuffer m_vecDataIn;
     octetBuffer m_vecDataOut;
-    ParserPlusPlus m_ParserPlusPlus;
+    HttpParser m_HttpParser;
     uv_tcp_t m_handle;
     int m_request_num;
     uv_write_t m_write_req;
@@ -32,7 +32,7 @@ public:
     inline octetBuffer& getInDataBuffer(){return m_vecDataIn;}
     inline octetBuffer& getOutDataBuffer(){return m_vecDataOut;}
 
-    inline ParserPlusPlus& getParserPlusPlus(void) {return m_ParserPlusPlus;}
+    inline HttpParser& getHttpParser(void) {return m_HttpParser;}
     inline int& getFD(){return m_fd;}
     inline void setFD(int p_fd){m_fd=p_fd;}
     void setDataIN(char * p_data, size_t p_size) { m_vecDataIn.setData(p_data, p_size);  }

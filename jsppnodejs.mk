@@ -2,18 +2,18 @@
 ## Auto Generated makefile by CodeLite IDE
 ## any manual changes will be erased      
 ##
-## Release
+## Debug
 ProjectName            :=jsppnodejs
-ConfigurationName      :=Release
+ConfigurationName      :=Debug
 WorkspacePath          := "/home/anandrathi/sre/jsppnodejs"
 ProjectPath            := "/home/anandrathi/sre/jsppnodejs"
-IntermediateDirectory  :=./Release
+IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=04/03/2013
+Date                   :=04/04/2013
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -36,7 +36,7 @@ ObjectsFileList        :="jsppnodejs.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
 LinkOptions            :=  
-IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)/home/anandrathi/sre/node-v0.10.0/deps/http_parser $(IncludeSwitch)/home/anandrathi/sre/boost_1_53_0 $(IncludeSwitch)/home/anandrathi/sre/node-v0.10.0/deps 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)/home/anandrathi/sre/node-v0.10.0/deps/http_parser $(IncludeSwitch)/home/anandrathi/sre/boost_1_53_0/ $(IncludeSwitch)/home/anandrathi/sre/node-v0.10.0/deps 
 IncludePCH             := 
 RcIncludePath          := 
 Libs                   := $(LibrarySwitch)boost_thread $(LibrarySwitch)pthread $(LibrarySwitch)boost_system $(LibrarySwitch)uv $(LibrarySwitch)rt 
@@ -50,8 +50,8 @@ LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)/home/anandr
 AR       := ar rcus
 CXX      := g++
 CC       := gcc
-CXXFLAGS :=  -O2 -Wall $(Preprocessors)
-CFLAGS   :=  -O2 -Wall $(Preprocessors)
+CXXFLAGS :=  -g -O0 -Wall $(Preprocessors)
+CFLAGS   :=  -g -O0 -Wall $(Preprocessors)
 
 
 ##
@@ -59,7 +59,7 @@ CFLAGS   :=  -O2 -Wall $(Preprocessors)
 ##
 CodeLiteDir:=/usr/share/codelite
 LD_LIBRARY_PATH:=/home/anandrathi/sre/boost_1_53_0/stage/lib
-Objects0=$(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix) $(IntermediateDirectory)/server3_main$(ObjectSuffix) $(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix) $(IntermediateDirectory)/event_loop$(ObjectSuffix) $(IntermediateDirectory)/worker$(ObjectSuffix) $(IntermediateDirectory)/client_connection$(ObjectSuffix) $(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix) $(IntermediateDirectory)/server3_main$(ObjectSuffix) $(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix) $(IntermediateDirectory)/event_loop$(ObjectSuffix) $(IntermediateDirectory)/worker$(ObjectSuffix) $(IntermediateDirectory)/client_connection$(ObjectSuffix) $(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix) $(IntermediateDirectory)/workerPool$(ObjectSuffix) 
 
 Objects=$(Objects0) 
 
@@ -76,7 +76,7 @@ $(OutputFile): $(IntermediateDirectory)/.d $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) @$(ObjectsFileList) $(LibPath) $(Libs) $(LinkOptions)
 
 $(IntermediateDirectory)/.d:
-	@test -d ./Release || $(MakeDirCommand) ./Release
+	@test -d ./Debug || $(MakeDirCommand) ./Debug
 
 PreBuild:
 
@@ -140,6 +140,14 @@ $(IntermediateDirectory)/SynchronisedQueue$(DependSuffix): SynchronisedQueue.cpp
 $(IntermediateDirectory)/SynchronisedQueue$(PreprocessSuffix): SynchronisedQueue.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SynchronisedQueue$(PreprocessSuffix) "SynchronisedQueue.cpp"
 
+$(IntermediateDirectory)/workerPool$(ObjectSuffix): workerPool.cpp $(IntermediateDirectory)/workerPool$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/workerPool.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/workerPool$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/workerPool$(DependSuffix): workerPool.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/workerPool$(ObjectSuffix) -MF$(IntermediateDirectory)/workerPool$(DependSuffix) -MM "workerPool.cpp"
+
+$(IntermediateDirectory)/workerPool$(PreprocessSuffix): workerPool.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/workerPool$(PreprocessSuffix) "workerPool.cpp"
+
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
 ##
@@ -167,7 +175,10 @@ clean:
 	$(RM) $(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/SynchronisedQueue$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/SynchronisedQueue$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/workerPool$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/workerPool$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/workerPool$(PreprocessSuffix)
 	$(RM) $(OutputFile)
-	$(RM) ".build-release/jsppnodejs"
+	$(RM) ".build-debug/jsppnodejs"
 
 

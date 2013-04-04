@@ -3,8 +3,7 @@
 #include "libjspp_http_parser.h"
 
 Worker::Worker(ClientSynchronisedQueue&  p_ClientSynchronisedQueue):
-m_ClientSynchronisedQueue(p_ClientSynchronisedQueue),
-m_thread_impl(0)
+m_ClientSynchronisedQueue(p_ClientSynchronisedQueue)
 {
 }
 
@@ -23,7 +22,7 @@ bool Worker::sleep(boost::system_time & t)
 
 void Worker::Start()
 {   if(m_thread_impl==0)
-        m_thread_impl =  new boost::thread(boost::bind(&Worker::Run, this));
+        m_thread_impl =  boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&Worker::Run, this)));
 }
 
 void Worker::Join() 
@@ -34,7 +33,10 @@ void Worker::Join()
 
 void Worker::Shutdown() 
 {
-    
+    m_stop=true;
+    if(m_thread_impl!=0){
+        m_thread_impl->interrupt();
+    }
 }
 
 void Worker::Run()

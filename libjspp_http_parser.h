@@ -74,7 +74,6 @@ HttpParser * m_Parser;
 class HttpParser
 {
 protected:
-    ParserPlusPlus m_parser;
     std::vector<HttpParserMessage> m_messages;
     int m_num_messages;
     std::vector<std::string> m_fields;  // header fields
@@ -112,6 +111,7 @@ protected:
 public:
     void Init(enum http_parser_type type);
     size_t parse (const char *buf, size_t len);
+    ParserPlusPlus& getParserPlusPlus() {return m_ParserPlusPlus;}    
 //    size_t parse_pause (const char *buf, size_t len);
 //    size_t parse_count_body (const char *buf, size_t len);
 };

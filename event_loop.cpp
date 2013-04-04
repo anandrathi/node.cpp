@@ -1,7 +1,7 @@
 #include "event_loop.h"
 #include <assert.h>
 
-inline  void CHECK(int r, char * msg, uv_loop_t* p_uv_loop)  
+inline  void CHECK(int r, const char * msg, uv_loop_t* p_uv_loop)  
 {
     if (r) { 
     uv_err_t err = uv_last_error(p_uv_loop); 
@@ -10,7 +10,7 @@ inline  void CHECK(int r, char * msg, uv_loop_t* p_uv_loop)
     }
 }
   
-inline  void CHECKSTATIC(int r, char * msg, uv_loop_t* p_uv_loop)  
+inline  void CHECKSTATIC(int r, const char * msg, uv_loop_t* p_uv_loop)  
 {
     if (r) {
         uv_err_t err = uv_last_error(p_uv_loop);
@@ -32,19 +32,19 @@ EventLoop::~EventLoop()
 
 
 int
-EventLoop::Loop()
+EventLoop::Loop(const char* ip, int port)
 {
   //parser_settings.on_message_complete = on_message_complete;
   m_uv_loop = uv_default_loop();
   int t_r = uv_tcp_init(m_uv_loop, &m_server);
   CHECK(t_r, "bind", m_uv_loop);
-  struct sockaddr_in address = uv_ip4_addr("0.0.0.0", 8000);
+  struct sockaddr_in address = uv_ip4_addr(ip, port);
   t_r = uv_tcp_bind(&m_server, address);
   CHECK(t_r, "bind", m_uv_loop);
   uv_listen((uv_stream_t*)&m_server, 128, on_connect_s);
-  LOG("listening on port 8000");
+  LOGF("listening on port %d", port);
   uv_run(m_uv_loop, UV_RUN_DEFAULT);
-    
+  return 0;   
 }
 
 void EventLoop::on_close_s(uv_handle_t* handle) {
@@ -61,6 +61,7 @@ uv_buf_t EventLoop::on_alloc_s(uv_handle_t* handle, size_t suggested_size) {
         return buf;
 }
 
+
 void EventLoop::on_read_s(uv_stream_t* tcp, ssize_t nread, uv_buf_t buf) {
   size_t parsed;
 
@@ -68,7 +69,8 @@ void EventLoop::on_read_s(uv_stream_t* tcp, ssize_t nread, uv_buf_t buf) {
   LOGF("[ %5d ] on read", client->getRequestNum());
 
   if (nread >= 0) {
-    parsed = client->getParserPlusPlus().m_Parser->parse(buf.base, nread);   
+      
+    parsed = client->getHttpParser().parse(buf.base, nread);   
     if (parsed < nread) {
       LOG_ERROR("parse error");
       uv_close((uv_handle_t*) client->getHandle(), EventLoop::on_close_s);
@@ -92,6 +94,7 @@ void EventLoop::on_connect_s(uv_stream_t* server_handle, int status)
 void EventLoop::on_connect(uv_stream_t* server_handle, int status) 
 {
    
+  m_request_num++;
   ClientConnection* client = 0;
   if(freeClientConn.size()>0) {
     client = const_cast<ClientConnection*>(freeClientConn.front());
@@ -102,12 +105,11 @@ void EventLoop::on_connect(uv_stream_t* server_handle, int status)
   }
   CHECK(status, "connect", m_uv_loop);
   client->setRequestNum(m_request_num);
-  m_request_num++;
-  LOGF("[ %5d ] new connection", m_request_num);
+  LOGF("[ %5lu ] new connection", m_request_num);
   uv_tcp_init(m_uv_loop, client->getHandle());
-  http_parser_init(&client->getParserPlusPlus(), HTTP_REQUEST);
+  http_parser_init(&client->getHttpParser().getParserPlusPlus(), HTTP_REQUEST);
 
-  client->getParserPlusPlus().data = client;
+  client->getHttpParser().getParserPlusPlus().data = client;
   client->getHandle()->data = client;
 
   int r = uv_accept(server_handle, (uv_stream_t*)client->getHandle());

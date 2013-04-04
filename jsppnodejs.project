@@ -26,6 +26,7 @@
     <File Name="SynchronisedQueue.h"/>
     <File Name="ClientConnCache.h"/>
     <File Name="workerPool.h"/>
+    <File Name="Errors.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -41,14 +42,17 @@
       <Compiler Options="-g;-O0;-Wall" C_Options="-g;-O0;-Wall" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="."/>
         <IncludePath Value="/home/anandrathi/sre/node-v0.10.0/deps/http_parser"/>
-        <IncludePath Value="/home/anandrathi/sre/node-v0.10.0/deps/uv/include"/>
         <IncludePath Value="/home/anandrathi/sre/boost_1_53_0/"/>
+        <IncludePath Value="/home/anandrathi/sre/node-v0.10.0/deps"/>
       </Compiler>
       <Linker Options="" Required="yes">
         <LibraryPath Value="/home/anandrathi/sre/boost_1_53_0/stage/lib"/>
+        <LibraryPath Value="//home/anandrathi/sre/node-v0.10.0/deps/uv"/>
         <Library Value="boost_thread.so"/>
         <Library Value="pthread"/>
         <Library Value="boost_system"/>
+        <Library Value="uv.a"/>
+        <Library Value="rt"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="0.0.0.0 8000 1 ." UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
