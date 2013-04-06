@@ -97,10 +97,12 @@ void EventLoop::on_connect(uv_stream_t* server_handle, int status)
   m_request_num++;
   ClientConnection* client = 0;
   if(freeClientConn.size()>0) {
+    LOGF("[ %5lu ] pull connection", m_request_num);
     client = const_cast<ClientConnection*>(freeClientConn.front());
     freeClientConn.pop_front();
   }
   else{
+    LOGF("[ %5lu ] create new connection", m_request_num);
     client = new ClientConnection(this);
   }
   CHECK(status, "connect", m_uv_loop);

@@ -132,62 +132,64 @@ int HttpParser::smessage_complete_cb (http_parser *p)
 /////////////////////////Statics END
 int HttpParser::request_url_cb(http_parser *p, const char *buf, size_t len)
 {
-  strncat(m_messages[m_num_messages].request_url, buf, len);
+  m_message.m_request_url.assign(buf, len);
   return 0;
 }
 int HttpParser::header_field_cb (http_parser *p, const char *buf, size_t len)
 {
-  HttpParserMessage *m = &m_messages[m_num_messages];
-  if (m->last_header_element != HttpParserMessage::FIELD)
-    m->num_headers++;
-
-  strncat(m->headers[m->num_headers-1][0], buf, len);
-
-  m->last_header_element = HttpParserMessage::FIELD;
+  
+    if (m_message.m_last_header_element != HttpParserMessage::FIELD) {
+        m_message.m_num_headers++;
+        if(m_message.m_num_headers > m_message.m_headersFields.size()) {
+            HeadersField hf;
+            m_message.m_headersFields.push_back(hf);
+        }
+        m_message.m_headersFields[m_message.m_num_headers-1].Field.assign(buf, len);
+    } else {
+        m_message.m_headersFields[m_message.m_num_headers-1].Field.append(buf, len);
+    }
+    m_message.m_last_header_element = HttpParserMessage::FIELD;
 
   return 0;
 }
 int HttpParser::header_value_cb (http_parser *p, const char *buf, size_t len)
 {
-  HttpParserMessage  *m = &m_messages[m_num_messages];
-  strncat(m->headers[m->num_headers-1][1], buf, len);
-  m->last_header_element = HttpParserMessage::VALUE;
-
-  return 0;
+    m_message.m_headersFields[m_message.m_num_headers-1].Value.assign(buf, len);
+    m_message.m_last_header_element = HttpParserMessage::VALUE;
+    return 0;
 }
+
 int HttpParser::body_cb(http_parser *p, const char *buf, size_t len)
 {
-  m_messages[m_num_messages].body.append(buf,len);  
-  //strncat(m_messages[m_num_messages].body, buf, len);
-  m_messages[m_num_messages].body_size += len;
- // printf("body_cb: '%s'\n", requests[num_messages].body);
+  m_message.m_body.append(buf,len);  
+  m_message.m_body_size += len;
   return 0;
 }
 int HttpParser::count_body_cb (http_parser *p, const char *buf, size_t len)
 {
-  m_messages[m_num_messages].body_size += len;
+  m_message.m_body_size += len;
   return 0;
 }
 int HttpParser::message_begin_cb (http_parser *p)
 {
-  m_messages[m_num_messages].message_begin_cb_called = 1;
+  m_message.m_message_begin_cb_called = 1;
   return 0;
 }
 
 int HttpParser::headers_complete_cb (http_parser *p)
 {
-  m_messages[m_num_messages].method = (http_method)p->method;
-  m_messages[m_num_messages].status_code = p->status_code;
-  m_messages[m_num_messages].http_major = p->http_major;
-  m_messages[m_num_messages].http_minor = p->http_minor;
-  m_messages[m_num_messages].headers_complete_cb_called = 1;
-  m_messages[m_num_messages].should_keep_alive = http_should_keep_alive(p);
+  m_message.m_method = (http_method)p->method;
+  m_message.m_status_code = p->status_code;
+  m_message.m_http_major = p->http_major;
+  m_message.m_http_minor = p->http_minor;
+  m_message.m_headers_complete_cb_called = 1;
+  m_message.m_should_keep_alive = http_should_keep_alive(p);
   return 0;
 }
 
 int HttpParser::message_complete_cb (http_parser *p)
 {
-  if (m_messages[m_num_messages].should_keep_alive != http_should_keep_alive(p))
+  if (m_message.m_should_keep_alive != http_should_keep_alive(p))
   {
     fprintf(stderr, "\n\n *** Error http_should_keep_alive() should have same "
                     "value in both on_message_complete and on_headers_complete "
@@ -195,14 +197,13 @@ int HttpParser::message_complete_cb (http_parser *p)
     assert(0);
     abort();
   }
-  m_messages[m_num_messages].message_complete_cb_called = TRUE;
-
-  m_messages[m_num_messages].message_complete_on_eof = m_currently_parsing_eof;
-
+  m_message.m_message_complete_cb_called = TRUE;
+  m_message.m_message_complete_on_eof = m_currently_parsing_eof;
   m_num_messages++;
-  HttpParserMessage  tm;
+/*  HttpParserMessage  tm;
   memset(&tm,sizeof(HttpParserMessage), 0);
   m_messages.push_back(tm);
+*/ 
   return 0;
 }
 
@@ -256,8 +257,8 @@ void HttpParser::Init(enum http_parser_type type)
     m_settings.on_headers_complete = HttpParser::sheaders_complete_cb;
     m_settings.on_message_complete = HttpParser::smessage_complete_cb;
     
-    memset(&tm,sizeof(HttpParserMessage), 0);
-    m_messages.push_back(tm);
+    //memset(&tm,sizeof(HttpParserMessage), 0);
+    //m_messages.push_back(tm);
     
 }
 
