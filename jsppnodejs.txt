@@ -1,1 +1,1 @@
-./Debug/libjspp_http_parser.o ./Debug/server3_main.o ./Debug/http_parser_http_parser.o ./Debug/event_loop.o ./Debug/worker.o ./Debug/client_connection.o ./Debug/SynchronisedQueue.o ./Debug/workerPool.o
+./Debug/libjspp_http_parser.o ./Debug/server3_main.o ./Debug/http_parser_http_parser.o ./Debug/event_loop.o ./Debug/worker.o ./Debug/client_connection.o ./Debug/SynchronisedQueue.o ./Debug/workerPool.o ./Debug/cstralgo.o ./Debug/test.o

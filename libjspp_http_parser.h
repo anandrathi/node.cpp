@@ -21,6 +21,18 @@
 
 #ifndef NODE_HTTP_PARSER
 #define NODE_HTTP_PARSER
+#include "http_parser.h"
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>    // std::lexicographical_compare
+#include <cctype>       // std::tolower
+#include <cstring>
+
+#define MAX_HEADERS 13
+#define MAX_ELEMENT_SIZE 2048
+#define MAX_ELEMENT_SIZE 2048
 
 //HTTP Request
 /*
@@ -58,21 +70,30 @@ warning
 origin
  * */
 
-//#include "v8.h"
-//
-#include "http_parser.h"
-#include <string>
-#include <vector>
+extern std::set<std::string> m_HTTPRequestStdHeaders;
+extern std::set<std::string> m_HTTPReqspoceStdHeaders;
+void InitHTTPRequestStdHeaders();
+void InitHTTPResponceStdHeaders();
 
-#define MAX_HEADERS 13
-#define MAX_ELEMENT_SIZE 2048
-#define MAX_ELEMENT_SIZE 2048
+struct ciLessLibC : public std::binary_function<std::string, std::string, bool> {
+    bool operator()(const std::string &lhs, const std::string &rhs) const {
+        return strcasecmp(lhs.c_str(), rhs.c_str()) < 0 ? 1 : 0;
+    }
+};
 
 //#define MIN(a,b) ((a) < (b) ? (a) : (b))
 struct HeadersField {
     std::string Field;
     std::string Value;
 };
+
+struct StdHeadersField {
+    bool isSet;
+    std::string Value;
+};
+
+typedef std::vector<HeadersField> HEADERSFIELD;
+typedef std::map< std::string,  StdHeadersField > STDHTTPHEADERSFIELDMAP;
 
 struct HttpParserMessage {
   std::string m_name; // for debugging purposes
@@ -92,7 +113,8 @@ struct HttpParserMessage {
   uint16_t m_port;
   size_t m_num_headers;
   enum { NONE=0, FIELD, VALUE } m_last_header_element;
-  std::vector<HeadersField> m_headersFields;
+  HEADERSFIELD m_headersFields;
+  STDHTTPHEADERSFIELDMAP m_StdHeadersFields;
   int m_should_keep_alive;
 
   std::string m_upgrade; // upgraded body
@@ -152,6 +174,9 @@ public:
     void Init(enum http_parser_type type);
     size_t parse (const char *buf, size_t len);
     ParserPlusPlus& getParserPlusPlus() {return m_ParserPlusPlus;}    
+    std::string m_tempstr;
+    std::string m_tempHeader;
+    STDHTTPHEADERSFIELDMAP::iterator m_it;
 //    size_t parse_pause (const char *buf, size_t len);
 //    size_t parse_count_body (const char *buf, size_t len);
 };

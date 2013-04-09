@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=04/06/2013
+Date                   :=04/10/2013
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -50,8 +50,8 @@ LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)/home/anandr
 AR       := ar rcus
 CXX      := g++
 CC       := gcc
-CXXFLAGS :=  -g -O0 -Wall $(Preprocessors)
-CFLAGS   :=  -g -O0 -Wall $(Preprocessors)
+CXXFLAGS :=  -g -O3 -Wall $(Preprocessors)
+CFLAGS   :=  -g -O3 -Wall $(Preprocessors)
 
 
 ##
@@ -59,7 +59,8 @@ CFLAGS   :=  -g -O0 -Wall $(Preprocessors)
 ##
 CodeLiteDir:=/usr/share/codelite
 LD_LIBRARY_PATH:=/home/anandrathi/sre/boost_1_53_0/stage/lib
-Objects0=$(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix) $(IntermediateDirectory)/server3_main$(ObjectSuffix) $(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix) $(IntermediateDirectory)/event_loop$(ObjectSuffix) $(IntermediateDirectory)/worker$(ObjectSuffix) $(IntermediateDirectory)/client_connection$(ObjectSuffix) $(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix) $(IntermediateDirectory)/workerPool$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/libjspp_http_parser$(ObjectSuffix) $(IntermediateDirectory)/server3_main$(ObjectSuffix) $(IntermediateDirectory)/http_parser_http_parser$(ObjectSuffix) $(IntermediateDirectory)/event_loop$(ObjectSuffix) $(IntermediateDirectory)/worker$(ObjectSuffix) $(IntermediateDirectory)/client_connection$(ObjectSuffix) $(IntermediateDirectory)/SynchronisedQueue$(ObjectSuffix) $(IntermediateDirectory)/workerPool$(ObjectSuffix) $(IntermediateDirectory)/cstralgo$(ObjectSuffix) $(IntermediateDirectory)/test$(ObjectSuffix) \
+	
 
 Objects=$(Objects0) 
 
@@ -148,6 +149,22 @@ $(IntermediateDirectory)/workerPool$(DependSuffix): workerPool.cpp
 $(IntermediateDirectory)/workerPool$(PreprocessSuffix): workerPool.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/workerPool$(PreprocessSuffix) "workerPool.cpp"
 
+$(IntermediateDirectory)/cstralgo$(ObjectSuffix): cstralgo.cpp $(IntermediateDirectory)/cstralgo$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/cstralgo.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/cstralgo$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/cstralgo$(DependSuffix): cstralgo.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/cstralgo$(ObjectSuffix) -MF$(IntermediateDirectory)/cstralgo$(DependSuffix) -MM "cstralgo.cpp"
+
+$(IntermediateDirectory)/cstralgo$(PreprocessSuffix): cstralgo.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/cstralgo$(PreprocessSuffix) "cstralgo.cpp"
+
+$(IntermediateDirectory)/test$(ObjectSuffix): test.cpp $(IntermediateDirectory)/test$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/jsppnodejs/test.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/test$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/test$(DependSuffix): test.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/test$(ObjectSuffix) -MF$(IntermediateDirectory)/test$(DependSuffix) -MM "test.cpp"
+
+$(IntermediateDirectory)/test$(PreprocessSuffix): test.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/test$(PreprocessSuffix) "test.cpp"
+
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
 ##
@@ -178,6 +195,12 @@ clean:
 	$(RM) $(IntermediateDirectory)/workerPool$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/workerPool$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/workerPool$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/cstralgo$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/cstralgo$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/cstralgo$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/test$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/test$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/test$(PreprocessSuffix)
 	$(RM) $(OutputFile)
 	$(RM) ".build-debug/jsppnodejs"
 

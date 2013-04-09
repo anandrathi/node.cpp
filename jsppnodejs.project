@@ -16,6 +16,7 @@
     <File Name="client_connection.cpp"/>
     <File Name="SynchronisedQueue.cpp"/>
     <File Name="workerPool.cpp"/>
+    <File Name="cstralgo.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
     <File Name="libjspp_http_parser.h"/>
@@ -27,6 +28,9 @@
     <File Name="ClientConnCache.h"/>
     <File Name="workerPool.h"/>
     <File Name="Errors.h"/>
+    <File Name="cstralgo.h"/>
+    <File Name="test.h"/>
+    <File Name="test.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -39,7 +43,7 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g;-O0;-Wall" C_Options="-g;-O0;-Wall" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
+      <Compiler Options="-g;-O3;-Wall" C_Options="-g;-O3;-Wall" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="."/>
         <IncludePath Value="/home/anandrathi/sre/node-v0.10.0/deps/http_parser"/>
         <IncludePath Value="/home/anandrathi/sre/boost_1_53_0/"/>

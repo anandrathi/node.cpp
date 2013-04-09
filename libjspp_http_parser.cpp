@@ -14,6 +14,102 @@
 #define TRUE 1
 #undef FALSE
 #define FALSE 0
+#include "cstralgo.h"
+
+std::set<std::string> m_HTTPRequestStdHeaders;
+std::set<std::string> m_HTTPReqspoceStdHeaders;
+void InitHTTPRequestStdHeaders() 
+{
+    //std
+    m_HTTPRequestStdHeaders.insert("accept");
+    m_HTTPRequestStdHeaders.insert("accept-charset");
+    m_HTTPRequestStdHeaders.insert("accept-encoding");
+    m_HTTPRequestStdHeaders.insert("accept-language");
+    m_HTTPRequestStdHeaders.insert("accept-datetime");
+    m_HTTPRequestStdHeaders.insert("authorization");
+    m_HTTPRequestStdHeaders.insert("cache-control");
+    m_HTTPRequestStdHeaders.insert("connection");
+    m_HTTPRequestStdHeaders.insert("cookie");
+    m_HTTPRequestStdHeaders.insert("content-length");
+    m_HTTPRequestStdHeaders.insert("content-md5");
+    m_HTTPRequestStdHeaders.insert("content-type");
+    m_HTTPRequestStdHeaders.insert("date");
+    m_HTTPRequestStdHeaders.insert("expect");
+    m_HTTPRequestStdHeaders.insert("from");
+    m_HTTPRequestStdHeaders.insert("host");
+    m_HTTPRequestStdHeaders.insert("if-match");
+    m_HTTPRequestStdHeaders.insert("if-modified-since");
+    m_HTTPRequestStdHeaders.insert("if-none-match");
+    m_HTTPRequestStdHeaders.insert("if-range");
+    m_HTTPRequestStdHeaders.insert("if-unmodified-since");
+    m_HTTPRequestStdHeaders.insert("max-forwards");
+    m_HTTPRequestStdHeaders.insert("pragma");
+    m_HTTPRequestStdHeaders.insert("proxy-authorization");
+    m_HTTPRequestStdHeaders.insert("range");
+    m_HTTPRequestStdHeaders.insert("referer");
+    m_HTTPRequestStdHeaders.insert("te");
+    m_HTTPRequestStdHeaders.insert("upgrade");
+    m_HTTPRequestStdHeaders.insert("user-agent");
+    m_HTTPRequestStdHeaders.insert("via");
+    m_HTTPRequestStdHeaders.insert("warning");
+    m_HTTPRequestStdHeaders.insert("origin");
+    //Non Std
+    m_HTTPRequestStdHeaders.insert("x-requested-with");
+    m_HTTPRequestStdHeaders.insert("x-forwarded-for");
+    m_HTTPRequestStdHeaders.insert("x-forwarded-for");
+    m_HTTPRequestStdHeaders.insert("x-forwarded-proto");
+    m_HTTPRequestStdHeaders.insert("front-end-https");
+    m_HTTPRequestStdHeaders.insert("x-att-deviceid");
+    m_HTTPRequestStdHeaders.insert("x-wap-profile");
+    m_HTTPRequestStdHeaders.insert("proxy-connection");
+} 
+
+void InitHTTPResponceStdHeaders()
+{
+    m_HTTPReqspoceStdHeaders.insert("access-control-allow-origin");
+    m_HTTPReqspoceStdHeaders.insert("accept-ranges");
+    m_HTTPReqspoceStdHeaders.insert("age");
+    m_HTTPReqspoceStdHeaders.insert("allow");
+    m_HTTPReqspoceStdHeaders.insert("cache-control");
+    m_HTTPReqspoceStdHeaders.insert("connection");
+    m_HTTPReqspoceStdHeaders.insert("content-encoding");
+    m_HTTPReqspoceStdHeaders.insert("content-language");
+    m_HTTPReqspoceStdHeaders.insert("content-length");
+    m_HTTPReqspoceStdHeaders.insert("content-location");
+    m_HTTPReqspoceStdHeaders.insert("content-md5");
+    m_HTTPReqspoceStdHeaders.insert("content-disposition");
+    m_HTTPReqspoceStdHeaders.insert("content-range");
+    m_HTTPReqspoceStdHeaders.insert("content-type");
+    m_HTTPReqspoceStdHeaders.insert("date");
+    m_HTTPReqspoceStdHeaders.insert("etag");
+    m_HTTPReqspoceStdHeaders.insert("expires");
+    m_HTTPReqspoceStdHeaders.insert("last-modified");
+    m_HTTPReqspoceStdHeaders.insert("link");
+    m_HTTPReqspoceStdHeaders.insert("location");
+    m_HTTPReqspoceStdHeaders.insert("p3p");
+    m_HTTPReqspoceStdHeaders.insert("pragma");
+    m_HTTPReqspoceStdHeaders.insert("proxy-authenticate");
+    m_HTTPReqspoceStdHeaders.insert("refresh");
+    m_HTTPReqspoceStdHeaders.insert("retry-after");
+    m_HTTPReqspoceStdHeaders.insert("server");
+    m_HTTPReqspoceStdHeaders.insert("set-cookie");
+    m_HTTPReqspoceStdHeaders.insert("status");
+    m_HTTPReqspoceStdHeaders.insert("strict-transport-security");
+    m_HTTPReqspoceStdHeaders.insert("trailer");
+    m_HTTPReqspoceStdHeaders.insert("transfer-encoding");
+    m_HTTPReqspoceStdHeaders.insert("vary");
+    m_HTTPReqspoceStdHeaders.insert("via");
+    m_HTTPReqspoceStdHeaders.insert("warning");
+    m_HTTPReqspoceStdHeaders.insert("www-authenticate");
+    
+    m_HTTPReqspoceStdHeaders.insert("x-frame-options");
+    m_HTTPReqspoceStdHeaders.insert("x-xss-protection");
+    m_HTTPReqspoceStdHeaders.insert("x-content-security-policy");
+    m_HTTPReqspoceStdHeaders.insert("x-webkit-csp");
+    m_HTTPReqspoceStdHeaders.insert("x-content-type-options");
+    m_HTTPReqspoceStdHeaders.insert("x-powered-by");
+    m_HTTPReqspoceStdHeaders.insert("x-ua-compatible");
+}
 
 
 // okThis is a binding to http_parser (https://github.com/joyent/http-parser)
@@ -26,66 +122,6 @@
 //     ...
 // No copying is performed when slicing the buffer, only small reference
 // allocations.
-/*
-static std::string on_headers_sym;
-static std::string on_headers_complete_sym;
-static std::string on_body_sym;
-static std::string on_message_complete_sym;
-
-static std::string method_sym;
-static std::string status_code_sym;
-static std::string http_version_sym;
-static std::string version_major_sym;
-static std::string version_minor_sym;
-static std::string should_keep_alive_sym;
-static std::string upgrade_sym;
-static std::string headers_sym;
-static std::string url_sym;
-
-static std::string unknown_method_sym;
-
-#define X(num, name, string) static std::string name##_sym;
-HTTP_METHOD_MAP(X)
-#undef X
-
-static struct http_parser_settings settings;
-
-
-// This is a hack to get the current_buffer to the callbacks with the least
-// amount of overhead. Nothing else will run while http_parser_execute()
-// runs, therefore this pointer can be set and used for the execution.
-//static Local<Value>* current_buffer;
-static char* current_buffer_data;
-static size_t current_buffer_len;
-
-
-#define HTTP_CB(name)                                                         \
-  int name(http_parser* p_) {                                          \
-    Parser* self = container_of(p_, Parser, parser_);                         \
-    return self->name##_();                                                   \
-  }                                                                           \
-  int name##_()
-
-
-#define HTTP_DATA_CB(name)                                                    \
-  int name(http_parser* p_, const char* at, size_t length) {           \
-    Parser* self = container_of(p_, Parser, parser_);                         \
-    return self->name##_(at, length);                                         \
-  }                                                                           \
-  int name##_(const char* at, size_t length)
-
-
-static inline std::string
-method_to_str(unsigned short m) {
-  switch (m) {
-#define X(num, name, string) case HTTP_##name: return name##_sym;
-  HTTP_METHOD_MAP(X)
-#undef X
-  }
-  return unknown_method_sym;
-}
-
-*/
 
    
 int HttpParser::srequest_url_cb (http_parser *p, const char *buf, size_t len)
@@ -137,16 +173,18 @@ int HttpParser::request_url_cb(http_parser *p, const char *buf, size_t len)
 }
 int HttpParser::header_field_cb (http_parser *p, const char *buf, size_t len)
 {
-  
+    cstralgo::tolowerLen(const_cast<char*>(buf), len);
     if (m_message.m_last_header_element != HttpParserMessage::FIELD) {
         m_message.m_num_headers++;
         if(m_message.m_num_headers > m_message.m_headersFields.size()) {
             HeadersField hf;
             m_message.m_headersFields.push_back(hf);
         }
-        m_message.m_headersFields[m_message.m_num_headers-1].Field.assign(buf, len);
+        m_tempHeader.assign(buf, len);
+        //m_message.m_headersFields[m_message.m_num_headers-1].Field.assign(buf, len);
     } else {
-        m_message.m_headersFields[m_message.m_num_headers-1].Field.append(buf, len);
+        m_tempHeader.append(buf, len);
+        //m_message.m_headersFields[m_message.m_num_headers-1].Field.append(buf, len);
     }
     m_message.m_last_header_element = HttpParserMessage::FIELD;
 
@@ -154,9 +192,15 @@ int HttpParser::header_field_cb (http_parser *p, const char *buf, size_t len)
 }
 int HttpParser::header_value_cb (http_parser *p, const char *buf, size_t len)
 {
-    m_message.m_headersFields[m_message.m_num_headers-1].Value.assign(buf, len);
     m_message.m_last_header_element = HttpParserMessage::VALUE;
-    return 0;
+    m_it = m_message.m_StdHeadersFields.find(m_tempHeader);
+    if(m_it!=m_message.m_StdHeadersFields.end()) {
+        m_it->second.Value.assign(buf, len);
+        m_it->second.isSet=true;
+    }else {
+        m_message.m_headersFields[m_message.m_num_headers-1].Value.assign(buf, len);
+    }
+   return 0;
 }
 
 int HttpParser::body_cb(http_parser *p, const char *buf, size_t len)
@@ -200,10 +244,6 @@ int HttpParser::message_complete_cb (http_parser *p)
   m_message.m_message_complete_cb_called = TRUE;
   m_message.m_message_complete_on_eof = m_currently_parsing_eof;
   m_num_messages++;
-/*  HttpParserMessage  tm;
-  memset(&tm,sizeof(HttpParserMessage), 0);
-  m_messages.push_back(tm);
-*/ 
   return 0;
 }
 
@@ -215,24 +255,6 @@ size_t HttpParser::parse (const char *buf, size_t len)
   nparsed = http_parser_execute(static_cast<http_parser*>(&m_ParserPlusPlus), &m_settings, buf, len);
   return nparsed;
 }
-
-/*size_t HttpParser::parse_count_body (const char *buf, size_t len)
-{
-  size_t nparsed;
-  m_currently_parsing_eof = (len == 0);
-  nparsed = http_parser_execute(static_cast<http_parser*>(&m_parser), &settings_count_body, buf, len);
-  return nparsed;
-}
-
-size_t HttpParser::parse_pause (const char *buf, size_t len)
-{
-  size_t nparsed;
-  http_parser_settings s = settings_pause;
-  m_currently_parsing_eof = (len == 0);
-  m_current_pause_parser = &s;
-  nparsed = http_parser_execute(static_cast<http_parser*>(&m_parser), current_pause_parser, buf, len);
-  return nparsed;
-}*/
 
 void HttpParser::DeInit()
 {
@@ -259,7 +281,6 @@ void HttpParser::Init(enum http_parser_type type)
     
     //memset(&tm,sizeof(HttpParserMessage), 0);
     //m_messages.push_back(tm);
-    
 }
 
 
