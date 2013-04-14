@@ -29,51 +29,13 @@
 #include <algorithm>    // std::lexicographical_compare
 #include <cctype>       // std::tolower
 #include <cstring>
-
+#include <tr1/unordered_map>
+#include <tr1/unordered_set>
 #define MAX_HEADERS 13
 #define MAX_ELEMENT_SIZE 2048
 #define MAX_ELEMENT_SIZE 2048
 
 //HTTP Request
-/*
-accept
-accept-charset
-accept-encoding
-accept-language
-accept-datetime
-authorization
-cache-control
-connection
-cookie
-content-length
-content-md5
-content-type
-date
-expect
-from
-host
-if-match
-if-modified-since
-if-none-match
-if-range
-if-unmodified-since
-max-forwards
-pragma
-proxy-authorization
-range
-referer
-te
-upgrade
-user-agent
-via
-warning
-origin
- * */
-
-extern std::set<std::string> m_HTTPRequestStdHeaders;
-extern std::set<std::string> m_HTTPReqspoceStdHeaders;
-void InitHTTPRequestStdHeaders();
-void InitHTTPResponceStdHeaders();
 
 struct ciLessLibC : public std::binary_function<std::string, std::string, bool> {
     bool operator()(const std::string &lhs, const std::string &rhs) const {
@@ -88,12 +50,13 @@ struct HeadersField {
 };
 
 struct StdHeadersField {
+    StdHeadersField():isSet(false){Value.reserve(50);}
     bool isSet;
     std::string Value;
 };
 
 typedef std::vector<HeadersField> HEADERSFIELD;
-typedef std::map< std::string,  StdHeadersField > STDHTTPHEADERSFIELDMAP;
+typedef std::tr1::unordered_map< std::string,  StdHeadersField > STDHTTPHEADERSFIELDMAP;
 
 struct HttpParserMessage {
   std::string m_name; // for debugging purposes
@@ -103,7 +66,7 @@ struct HttpParserMessage {
   int m_status_code;
   char m_request_path[MAX_ELEMENT_SIZE];
   std::string m_request_url;
-  char m_fragment[MAX_ELEMENT_SIZE];
+  std::string m_fragment;
   char m_query_string[MAX_ELEMENT_SIZE];
   std::string m_body;
   size_t m_body_size;
@@ -126,6 +89,18 @@ struct HttpParserMessage {
   int m_headers_complete_cb_called;
   int m_message_complete_cb_called;
   int m_message_complete_on_eof;
+
+  http_parser_url m_http_parser_url;
+  
+  std::string url_UF_SCHEMA;
+  std::string url_UF_HOST;
+  std::string url_UF_PORT;
+  std::string url_UF_PATH;
+  std::string url_UF_QUERY;
+  std::string url_UF_FRAGMENT;
+  std::string url_UF_USERINFO;
+  std::string url_UF_MAX;
+  
 };
 
 class HttpParser;
@@ -138,8 +113,8 @@ class HttpParser
 protected:
     HttpParserMessage m_message;
     int m_num_messages;
-    std::vector<std::string> m_fields;  // header fields
-    std::vector<std::string> m_values;  // header values
+    //std::vector<std::string> m_fields;  // header fields
+    //std::vector<std::string> m_values;  // header values
     std::string m_url;
     int m_currently_parsing_eof;
     int m_num_fields;
@@ -157,8 +132,10 @@ protected:
     static int smessage_begin_cb (http_parser *p);
     static int sheaders_complete_cb (http_parser *p);
     static int smessage_complete_cb (http_parser *p);
+    static int sfragment_cb(http_parser *p, const char *buf, size_t len);
     //methods
     int request_url_cb(http_parser *p, const char *buf, size_t len);
+    int fragment_cb(http_parser *p, const char *buf, size_t len);
     int header_field_cb (http_parser *p, const char *buf, size_t len);
     int header_value_cb (http_parser *p, const char *buf, size_t len);
     int body_cb (http_parser *p, const char *buf, size_t len);
@@ -170,13 +147,21 @@ protected:
     //void parser_init(enum http_parser_type type);
     //void parser_free ();
     void DeInit();
+    
+    static std::tr1::unordered_set<std::string> s_HTTPRequestStdHeaders;
+    static std::tr1::unordered_set<std::string> s_HTTPResponseStdHeaders;
+    
 public:
+    static void InitHTTPRequestStdHeaders();
+    static void InitHTTPResponceStdHeaders();
     void Init(enum http_parser_type type);
+    void ReInit();
     size_t parse (const char *buf, size_t len);
     ParserPlusPlus& getParserPlusPlus() {return m_ParserPlusPlus;}    
     std::string m_tempstr;
     std::string m_tempHeader;
     STDHTTPHEADERSFIELDMAP::iterator m_it;
+    enum http_parser_type m_http_parser_type;
 //    size_t parse_pause (const char *buf, size_t len);
 //    size_t parse_count_body (const char *buf, size_t len);
 };

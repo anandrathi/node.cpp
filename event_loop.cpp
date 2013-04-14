@@ -54,11 +54,11 @@ void EventLoop::on_close_s(uv_handle_t* handle) {
 }
 
 uv_buf_t EventLoop::on_alloc_s(uv_handle_t* handle, size_t suggested_size) {
-        ClientConnection* client = (ClientConnection*) handle->data;
-        uv_buf_t buf;
-        buf.base = (char *)client->getInDataBuffer().resizeWriteFromStart(suggested_size);
-        buf.len = suggested_size;
-        return buf;
+    ClientConnection* client = (ClientConnection*) handle->data;
+    uv_buf_t buf;
+    buf.base = (char *)client->getInDataBuffer().resizeWriteFromStart(suggested_size);
+    buf.len = suggested_size;
+    return buf;
 }
 
 
@@ -69,7 +69,6 @@ void EventLoop::on_read_s(uv_stream_t* tcp, ssize_t nread, uv_buf_t buf) {
   LOGF("[ %5d ] on read", client->getRequestNum());
 
   if (nread >= 0) {
-      
     parsed = client->getHttpParser().parse(buf.base, nread);   
     if (parsed < nread) {
       LOG_ERROR("parse error");
@@ -93,15 +92,13 @@ void EventLoop::on_connect_s(uv_stream_t* server_handle, int status)
 
 void EventLoop::on_connect(uv_stream_t* server_handle, int status) 
 {
-   
   m_request_num++;
   ClientConnection* client = 0;
   if(freeClientConn.size()>0) {
     LOGF("[ %5lu ] pull connection", m_request_num);
     client = const_cast<ClientConnection*>(freeClientConn.front());
     freeClientConn.pop_front();
-  }
-  else{
+  } else {
     LOGF("[ %5lu ] create new connection", m_request_num);
     client = new ClientConnection(this);
   }
